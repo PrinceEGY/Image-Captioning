@@ -64,6 +64,25 @@ class RNNImageCaptioner(BaseImageCaptioner):
         else:
             return x3
 
+    def build(self, input_shape):
+        img_features, caps = input_shape
+        self.GAP_layer.build(img_features)
+        out_shape1 = self.GAP_layer.compute_output_shape(img_features)
+        self.img_dropout_layer1.build(out_shape1)
+        out_shape1 = self.img_dropout_layer1.compute_output_shape(out_shape1)
+        self.img_dense_layer1.build(out_shape1)
+        out_shape1 = self.img_dense_layer1.compute_output_shape(out_shape1)
+
+        self.embedding.build(caps)
+        out_shape2 = self.embedding.compute_output_shape(caps)
+        for rnn_layer in self.rnn:
+            rnn_layer.build(out_shape2)
+            out_shape2 = rnn_layer.compute_output_shape(out_shape2)
+
+        self.add_layer.build(out_shape2)
+        out_shape3 = self.add_layer.compute_output_shape(out_shape2)
+        self.output_layer.build(out_shape3)
+
     def greedy_gen(self, images, max_len=30, temperature=0.0):
         if images.ndim == 3:  # set as batch shape
             images = images[tf.newaxis, ...]

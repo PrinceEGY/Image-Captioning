@@ -92,10 +92,7 @@ def load_model(weights_path):
             rnn_layers=1,
             rnn_units=512,
         )
-        # TODO: reaplce the built flag with a better solution
-        model.built = True
-        model.output_layer.built = True
-        model.greedy_gen(tf.zeros((1, 224, 224, 3)))
+        model.build(input_shape=((None, 7, 7, 1536), (None, None)))
         model.load_weights(weights_path)
     elif args.model == "transformer":
         raise NotImplementedError("Transformer model not implemented")

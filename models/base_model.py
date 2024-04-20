@@ -99,3 +99,6 @@ class SmartOutput(keras.Layer):
     def call(self, inputs):
         x = self.dense(inputs)
         return x + self.marignal_bias
+
+    def build(self, input_shape):
+        self.dense.build(input_shape)
