@@ -105,7 +105,7 @@ def _is_url(path):
 
 if __name__ == "__main__":
     if _is_url(args.image_path):
-        image_path, _ = urllib.request.urlretrieve(args.image_path, "temp.jpg")
+        image_path, _ = urllib.request.urlretrieve(args.image_path, "_temp.jpg")
     else:
         image_path = args.image_path
 
@@ -117,4 +117,6 @@ if __name__ == "__main__":
     elif args.gen_method == "beam":
         caption = model.beam_search_gen(image, Kbeams=args.kbeams)
 
+    if _is_url(args.image_path):
+        os.remove(image_path)
     print(caption[0])
