@@ -38,7 +38,7 @@ parser.add_argument(
     "-w",
     "--weights_ckp_path",
     type=str,
-    required=True,
+    default=r"weights\gru-feat-ep_50-loss_1.55.weights.h5",
     help="Path to the weights of the Keras model (.weight.h5 file)",
 )
 
