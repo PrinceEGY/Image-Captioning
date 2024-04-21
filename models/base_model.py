@@ -32,6 +32,8 @@ class BaseImageCaptioner(keras.Model):
     def _one_step_gen(self, inputs, **kwargs):
         preds, *rem = self(
             inputs,
+            return_state=True,
+            training=False,
             **kwargs,
         )  # (batch, sequence, vocab)
         preds = preds.numpy()[:, -1, :]  # (batch, vocab)
