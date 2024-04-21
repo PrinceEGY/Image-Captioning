@@ -66,7 +66,7 @@ class FeatureExtractor(tf.keras.Layer):
             len(self) != 0
         ), "No features exists, Please extract features first using 'adapt' method"
         with open(out_path, "wb") as file:
-            pickle.dump(self.features_dict, file)
+            pickle.dump(dict(self.features_dict), file)
 
     def load(self, file_path):
         with open(file_path, "rb") as file:
