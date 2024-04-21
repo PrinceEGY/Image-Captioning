@@ -52,9 +52,19 @@ class RNNImageCaptioner(BaseImageCaptioner):
 
         x2 = self.embedding(caps, training=training)
 
-        # TODO: pass img features to the initial state
         for rnn_layer in self.rnn:
-            x2, state = rnn_layer(x2, initial_state=initial_state, training=training)
+            if initial_state is None:
+                x2, state = rnn_layer(
+                    x2,
+                    initial_state=x1,
+                    training=training,
+                )
+            else:
+                x2, state = rnn_layer(
+                    x2,
+                    initial_state=initial_state,
+                    training=training,
+                )
 
         x3 = self.add_layer([x1, x2])
         x3 = self.output_layer(x3)
