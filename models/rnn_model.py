@@ -49,7 +49,7 @@ class RNNImageCaptioner(BaseImageCaptioner):
         self.output_layer = SmartOutput(self.tokenizer)
 
     def call(self, inputs, initial_state=None, return_state=False, training=False):
-        features, caps = inputs
+        x1, x2 = inputs  # features, captions
 
         if self.pooling:
             x1 = self.GAP_layer(x1)
@@ -90,14 +90,14 @@ class RNNImageCaptioner(BaseImageCaptioner):
         self.img_dense_layer1.build(out_shape1)
         out_shape1 = self.img_dense_layer1.compute_output_shape(out_shape1)
 
-        self.embedding.build(caps)
-        out_shape2 = self.embedding.compute_output_shape(caps)
+        self.embedding.build(out_shape2)
+        out_shape2 = self.embedding.compute_output_shape(out_shape2)
         for rnn_layer in self.rnn:
             rnn_layer.build(out_shape2)
-            out_shape2 = rnn_layer.compute_output_shape(out_shape2)
+            out_shape2, state_shape = rnn_layer.compute_output_shape(out_shape2)
 
-        self.add_layer.build(out_shape2)
-        out_shape3 = self.add_layer.compute_output_shape(out_shape2)
+        self.add_layer.build((out_shape2, state_shape))
+        out_shape3 = self.add_layer.compute_output_shape((out_shape2, state_shape))
         self.output_layer.build(out_shape3)
 
     def greedy_gen(self, images, max_len=30, temperature=0.0):
@@ -114,7 +114,7 @@ class RNNImageCaptioner(BaseImageCaptioner):
         final_tokens = next_token
         state = None
 
-        for i in range(max_len):
+        for _ in range(max_len):
             preds, state = self._one_step_gen(
                 (img_features, next_token), initial_state=state
             )
