@@ -1,0 +1,47 @@
+model:
+  type: rnn
+  img_features_shape: [1536]
+  params:
+    embedding_dim: 512
+    rnn_layers: 1
+    rnn_units: 256
+    dropout_rate: 0.4
+    pooling: false
+
+train:
+  epochs: 50
+  steps_per_epoch: 150
+  validation_steps: 30
+  verbose: 1
+  adapt_bias: false
+  save_dir: weights/
+
+  # Optimizer's learning rate
+  learning_rate: 0.001
+  lr_schedule_InverseTimeDecay: true
+  decay_rate: 1
+  staircase: false
+  # decay_steps_multiple value is multiple of steps_per_epoch
+  # ex. 20 ->  20 * steps_per_epoch -> reducing the lr every 20 epochs
+  decay_steps_multiple: 20 
+
+  # Callbacks
+  early_stopping:
+    allow: true
+    monitor: val_loss
+    patience: 10
+    restore_best_weights: true
+    verbose: 1
+
+  checkpoint: 
+    allow: true
+    save_weights_only: true
+    # save_freq_multiple value is multiple of steps_per_epoch
+    # ex. 25 ->  25 * steps_per_epoch -> saving the model every 25 epochs
+    save_freq_multiple: 25
+    verbose: 1
+
+  generate_text:
+    allow: true
+    image_path: examples/dog.jpg
+    freq: 5
