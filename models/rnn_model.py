@@ -12,12 +12,14 @@ class RNNImageCaptioner(BaseImageCaptioner):
         embedding_dim,
         rnn_layers,
         rnn_units,
+        dropout_rate=0.4,
         **kwargs
     ):
         super().__init__(tokenizer, feature_extractor, **kwargs)
         self.embedding_dim = embedding_dim
         self.rnn_layers = rnn_layers
         self.rnn_units = rnn_units
+        self.dropout_rate = dropout_rate
 
         # Image feaures layers
         self.GAP_layer = keras.layers.GlobalAveragePooling2D()
@@ -34,7 +36,10 @@ class RNNImageCaptioner(BaseImageCaptioner):
         )
         self.rnn = [
             keras.layers.GRU(
-                rnn_units, return_sequences=True, return_state=True, dropout=0.4
+                rnn_units,
+                return_sequences=True,
+                return_state=True,
+                dropout=self.dropout_rate,
             )
             for _ in range(rnn_layers)
         ]
