@@ -51,11 +51,12 @@ class RNNImageCaptioner(BaseImageCaptioner):
     def call(self, inputs, initial_state=None, return_state=False, training=False):
         features, caps = inputs
 
-        x1 = self.GAP_layer(features)
+        if self.pooling:
+            x1 = self.GAP_layer(x1)
         x1 = self.img_dropout_layer1(x1)
         x1 = self.img_dense_layer1(x1)
 
-        x2 = self.embedding(caps, training=training)
+        x2 = self.embedding(x2, training=training)
 
         for rnn_layer in self.rnn:
             if initial_state is None:
@@ -80,9 +81,10 @@ class RNNImageCaptioner(BaseImageCaptioner):
             return x3
 
     def build(self, input_shape):
-        img_features, caps = input_shape
-        self.GAP_layer.build(img_features)
-        out_shape1 = self.GAP_layer.compute_output_shape(img_features)
+        out_shape1, out_shape2 = input_shape  # img_features, captions
+        if self.pooling:
+            self.GAP_layer.build(out_shape1)
+        out_shape1 = self.GAP_layer.compute_output_shape(out_shape1)
         self.img_dropout_layer1.build(out_shape1)
         out_shape1 = self.img_dropout_layer1.compute_output_shape(out_shape1)
         self.img_dense_layer1.build(out_shape1)
