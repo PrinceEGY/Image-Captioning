@@ -6,10 +6,12 @@ from tqdm import tqdm
 
 
 class BaseImageCaptioner(keras.Model):
-    def __init__(self, tokenizer, feature_extractor, **kwargs):
+    def __init__(self, tokenizer, feature_extractor, pooling=None, **kwargs):
         super().__init__(**kwargs)
         self.tokenizer = tokenizer
         self.feature_extractor = feature_extractor
+        self.pooling = pooling
+
         self.word_to_index = keras.layers.StringLookup(
             vocabulary=tokenizer.get_vocabulary(), mask_token=""
         )
