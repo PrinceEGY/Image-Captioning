@@ -116,7 +116,9 @@ class RNNImageCaptioner(BaseImageCaptioner):
 
         for _ in range(max_len):
             preds, state = self._one_step_gen(
-                (img_features, next_token), initial_state=state
+                (img_features, next_token),
+                initial_state=state,
+                return_state=True,
             )
             if temperature == 0:
                 next_token = tf.argmax(preds, axis=-1)[:, tf.newaxis]  # (batch, 1)
@@ -163,7 +165,9 @@ class RNNImageCaptioner(BaseImageCaptioner):
             candidate_sequences = []
             for seq, prob, state in sequences:
                 preds, state = self._one_step_gen(
-                    (img_features, seq[:, -1:]), initial_state=state
+                    (img_features, seq[:, -1:]),
+                    initial_state=state,
+                    return_state=True,
                 )
                 logits = tf.nn.softmax(preds).numpy()
                 sorted_logits = np.argsort(logits)
