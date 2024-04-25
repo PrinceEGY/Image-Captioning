@@ -6,7 +6,7 @@ from utils.utils import load_image
 
 class FeatureExtractor(tf.keras.Layer):
     def __init__(
-        self, imgs_path, feature_extractor=None, batch_size=64, img_shape=(224, 224)
+        self, feature_extractor, imgs_path=None, batch_size=64, img_shape=(224, 224)
     ):
         super().__init__()
         self.imgs_path = imgs_path
@@ -17,6 +17,7 @@ class FeatureExtractor(tf.keras.Layer):
         self._features_shape = None
 
     def adapt(self, ds):
+        assert self.imgs_path != None, "Please provide images path to adapt features"
         ds = ds.map(
             lambda img_path, _: (
                 self._get_img_id(img_path),
