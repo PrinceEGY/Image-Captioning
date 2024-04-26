@@ -1,0 +1,20 @@
+=== Evaluation with temperature  0  ===
+Cumulative 1-gram: 0.723520
+Cumulative 2-gram: 0.568146
+Cumulative 3-gram: 0.434283
+Cumulative 4-gram: 0.323392
+=== Evaluation with temperature  0.2  ===
+Cumulative 1-gram: 0.720931
+Cumulative 2-gram: 0.558558
+Cumulative 3-gram: 0.419408
+Cumulative 4-gram: 0.307827
+=== Evaluation with temperature  0.5  ===
+Cumulative 1-gram: 0.678589
+Cumulative 2-gram: 0.502683
+Cumulative 3-gram: 0.364624
+Cumulative 4-gram: 0.261563
+=== Evaluation with temperature  1  ===
+Cumulative 1-gram: 0.557721
+Cumulative 2-gram: 0.341233
+Cumulative 3-gram: 0.207018
+Cumulative 4-gram: 0.118021

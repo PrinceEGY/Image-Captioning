@@ -1,0 +1,6 @@
+===== Evaluation using 4 beams =====
+Cumulative 1-gram: 0.769585
+Cumulative 2-gram: 0.626629
+Cumulative 3-gram: 0.491993
+Cumulative 4-gram: 0.376399
+
