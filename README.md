@@ -22,6 +22,15 @@ cd Image-Captioning
 ```bash
 pip install -r requirements.txt
 ```
+3- download pretrained checkpoints:
+- LSTM Model checkpoint (name: lstm-emb256-rnn1.512-ep_150-loss_1.66.weights.h5)
+```bash
+gdown --fuzzy https://drive.google.com/file/d/1iZR7CLzlV0H8hMRcSkkJ-t9zl6IWKzHY/view?usp=drive_link -O .\weights\
+```
+- GRU Model checkpoint (name: gru-emb256-rnn1.512-ep_150-loss_1.54.weights.h5)
+```bash
+gdown --fuzzy https://drive.google.com/file/d/12slgnMETzzhDjsVxCegw0YMYshFxV-t6/view?usp=drive_link -O .\weights\
+```
 ## Making inference
 Two algorithms supported for generation
 1- **Greedy Decoding** with **Temperature** Argument: In this approach, the model generates captions by greedily selecting the most probable word at each time step, with the softmax output adjusted by a temperature parameter. This allows for controlling the randomness of word selection during generation.
