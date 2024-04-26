@@ -47,6 +47,7 @@ def parse_arguments():
         "--gen_method",
         choices=["greedy", "beam"],
         default="greedy",
+        nargs="+",
         help="Search strategy for caption generation",
     )
     parser.add_argument(
@@ -122,11 +123,14 @@ if __name__ == "__main__":
     image = load_image(image_path)
     model = load_model(args.weights_path)
 
-    if args.gen_method == "greedy":
-        caption = model.greedy_gen(image, temperature=args.temperature)
-    elif args.gen_method == "beam":
-        caption = model.beam_search_gen(image, Kbeams=args.kbeams)
+    for method in args.gen_method:
+        if method == "greedy":
+            caption = model.greedy_gen(image, temperature=args.temperature)
+        elif method == "beam":
+            caption = model.beam_search_gen(image, Kbeams=args.kbeams)
+        else:
+            raise ValueError(f"Invalid generation method: {method}")
+        print(f"Caption generated using '{method}' search strategy:\n{caption[0]}\n")
 
     if _is_url(args.image_path):
         os.remove(image_path)
-    print(caption[0])
