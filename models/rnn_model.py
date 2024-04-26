@@ -10,6 +10,7 @@ class RNNImageCaptioner(BaseImageCaptioner):
         tokenizer,
         feature_extractor,
         embedding_dim,
+        rnn_type,  # LSTM or GRU
         rnn_layers,
         rnn_units,
         dropout_rate=0.4,
@@ -17,6 +18,7 @@ class RNNImageCaptioner(BaseImageCaptioner):
     ):
         super().__init__(tokenizer, feature_extractor, **kwargs)
         self.embedding_dim = embedding_dim
+        self.rnn_type = rnn_type.upper()
         self.rnn_layers = rnn_layers
         self.rnn_units = rnn_units
         self.dropout_rate = dropout_rate
@@ -27,6 +29,7 @@ class RNNImageCaptioner(BaseImageCaptioner):
         self.img_dense_layer1 = keras.layers.Dense(
             rnn_units, activation="relu"
         )  # match the rnn units to add them together later
+        self._n_repeats = 2 if self.rnn_type == "LSTM" else 1
 
         # Captions layers
         self.embedding = keras.layers.Embedding(
@@ -35,11 +38,20 @@ class RNNImageCaptioner(BaseImageCaptioner):
             mask_zero=True,
         )
         self.rnn = [
-            keras.layers.GRU(
-                rnn_units,
-                return_sequences=True,
-                return_state=True,
-                dropout=self.dropout_rate,
+            (
+                keras.layers.LSTM(
+                    rnn_units,
+                    return_sequences=True,
+                    return_state=True,
+                    dropout=self.dropout_rate,
+                )
+                if self.rnn_type == "LSTM"
+                else keras.layers.GRU(
+                    rnn_units,
+                    return_sequences=True,
+                    return_state=True,
+                    dropout=self.dropout_rate,
+                )
             )
             for _ in range(rnn_layers)
         ]
@@ -60,13 +72,13 @@ class RNNImageCaptioner(BaseImageCaptioner):
 
         for rnn_layer in self.rnn:
             if initial_state is None:
-                x2, state = rnn_layer(
+                x2, *state = rnn_layer(
                     x2,
-                    initial_state=x1,
+                    initial_state=x1 if self.rnn_type == "GRU" else [x1, x1],
                     training=training,
                 )
             else:
-                x2, state = rnn_layer(
+                x2, *state = rnn_layer(
                     x2,
                     initial_state=initial_state,
                     training=training,
@@ -94,14 +106,16 @@ class RNNImageCaptioner(BaseImageCaptioner):
         out_shape2 = self.embedding.compute_output_shape(out_shape2)
         for rnn_layer in self.rnn:
             rnn_layer.build(out_shape2)
-            out_shape2, state_shape = rnn_layer.compute_output_shape(out_shape2)
+            out_shape2, *state_shape = rnn_layer.compute_output_shape(out_shape2)
 
-        self.add_layer.build((out_shape2, state_shape))
-        out_shape3 = self.add_layer.compute_output_shape((out_shape2, state_shape))
+        self.add_layer.build((out_shape2, *state_shape))
+        out_shape3 = self.add_layer.compute_output_shape((out_shape2, *state_shape))
         self.output_layer.build(out_shape3)
 
     def greedy_gen(self, images, max_len=30, temperature=0.0):
-        if images.ndim == 3:  # set as batch shape
+        if (
+            images.ndim == 3 or images.ndim == 1
+        ):  # set as batch shape (3 for non-pool image, 1 is for pooled image)
             images = images[tf.newaxis, ...]
 
         if images.shape[-1] == 3:  # extract the features if the input is an image
@@ -145,7 +159,9 @@ class RNNImageCaptioner(BaseImageCaptioner):
         return parsed_sentences
 
     def beam_search_gen(self, images, Kbeams=1, max_len=30):
-        if images.ndim == 3:  # set as batch shape
+        if (
+            images.ndim == 3 or images.ndim == 1
+        ):  # set as batch shape (3 for non-pool image, 1 is for pooled image)
             images = images[tf.newaxis, ...]
         assert (
             images.shape[0] == 1
