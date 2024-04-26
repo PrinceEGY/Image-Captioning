@@ -2,9 +2,10 @@ model:
   type: rnn
   img_features_shape: [1536]
   params:
-    embedding_dim: 512
+    embedding_dim: 256
+    rnn_type: GRU
     rnn_layers: 1
-    rnn_units: 256
+    rnn_units: 512
     dropout_rate: 0.4
     pooling: false
 
