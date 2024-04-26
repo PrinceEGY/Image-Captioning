@@ -2,7 +2,6 @@ import os
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
-
 import argparse
 import yaml
 
@@ -25,7 +24,7 @@ from data.data_loader import Flicker8K
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Image captioning inference")
+    parser = argparse.ArgumentParser(description="Image captioning training")
     parser.add_argument(
         "-n",
         "--name",
@@ -37,8 +36,8 @@ def parse_arguments():
         "-c",
         "--config",
         type=str,
-        default=r"configs/rnn_config.yaml",
-        help="Path to the configuration file, default to 'configs/rnn_config.yaml'",
+        default=r"configs/lstm_config.yaml",
+        help="Path to the configuration file, default to 'configs/lstm_config.yaml'",
     )
     parser.add_argument(
         "-e",
