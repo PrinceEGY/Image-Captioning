@@ -46,7 +46,7 @@ def parse_arguments():
         "-m",
         "--gen_method",
         choices=["greedy", "beam"],
-        default="greedy",
+        default=["greedy"],
         nargs="+",
         help="Search strategy for caption generation",
     )
