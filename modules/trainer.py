@@ -40,7 +40,7 @@ class Trainer:
         self.model.compile(optimizer=self.optimizer, loss=self.loss_fn)
         if self.adapt_bias:
             self.model.output_layer.adapt(
-                self.train_ds.map(lambda images, labels: labels)
+                self.train_ds.map(lambda inputs, labels: labels)
             )
         history = self.model.fit(
             self.train_ds,
