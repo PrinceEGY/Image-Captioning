@@ -25,14 +25,14 @@ def parse_arguments():
         "-c",
         "--config",
         type=str,
-        default=r"configs/lstm_config.yaml",
+        default="configs/lstm_config.yaml",
         help="Path to the configuration file, default to 'configs/lstm_config.yaml'",
     )
     parser.add_argument(
         "-w",
         "--weights_path",
         type=str,
-        default=r"weights\lstm-emb256-rnn1.512-ep_150-loss_1.66.weights.h5",
+        default="weights/lstm-emb256-rnn1.512-ep_150-loss_1.66.weights.h5",
         help="Path to the model weights",
     )
     parser.add_argument(
@@ -82,7 +82,7 @@ def load_config(config_path):
 def get_test_raw():
     print("Loading dataset...")
     data_loader = Flicker8K(
-        r"data\flicker8k", tokenizer=tokenizer, feature_extractor=feature_extractor
+        "data/flicker8k", tokenizer=tokenizer, feature_extractor=feature_extractor
     )
     _, _, test_raw = data_loader.get_raw_splits()
     return test_raw
@@ -119,12 +119,12 @@ if __name__ == "__main__":
     feature_extractor = FeatureExtractor(feature_extractor=effnet)
 
     if config["model"]["params"]["pooling"] == False:
-        feature_extractor.load(r"weights\features-pool.cache.pkl")
+        feature_extractor.load("weights/features-pool.cache.pkl")
     else:
-        feature_extractor.load(r"weights\features.cache.pkl")
+        feature_extractor.load("weights/features.cache.pkl")
 
     tokenizer = Tokenizer.from_vocabulary(
-        path=r"weights\tokenizer_vocab.pkl",
+        path="weights/tokenizer_vocab.pkl",
         standardize=Preprocessor(),
         ragged=True,
     )
