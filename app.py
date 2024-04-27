@@ -103,7 +103,7 @@ if __name__ == "__main__":
     feature_extractor = FeatureExtractor(feature_extractor=effnet)
 
     tokenizer = Tokenizer.from_vocabulary(
-        path=r"weights\tokenizer_vocab.pkl",
+        path="./weights/tokenizer_vocab.pkl",
         standardize=Preprocessor(),
         ragged=True,
     )
