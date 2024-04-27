@@ -1,4 +1,9 @@
+gdown==5.1.0
 keras==3.2.1
+matplotlib==3.8.4
+git+https://github.com/nltk/nltk.git
 numpy==1.26.4
+PyYAML==6.0.1
+streamlit==1.33.0
 tensorflow==2.16.1
 tqdm==4.66.2
