@@ -25,7 +25,7 @@ class RNNImageCaptioner(BaseImageCaptioner):
 
         # Image feaures layers
         self.GAP_layer = keras.layers.GlobalAveragePooling2D()
-        self.img_dropout_layer1 = keras.layers.Dropout(0.4)
+        self.img_dropout_layer1 = keras.layers.Dropout(dropout_rate)
         self.img_dense_layer1 = keras.layers.Dense(
             rnn_units, activation="relu"
         )  # match the rnn units to add them together later
