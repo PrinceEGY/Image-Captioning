@@ -30,8 +30,6 @@ class Evaluator:
                     [sen.decode("utf-8").split() for sen in cap.numpy().tolist()]
                     for cap in caps
                 ]
-                print(references)
-                print(hypotheses)
 
             for idx, temp in enumerate(temperatures):
                 f.write("===== Evaluation with temperature " + str(temp) + " =====\n")
