@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
     test_raw = get_test_raw()
     model = load_model(args.weights_path)
-    evaluator = Evaluator(model, test_raw.take(5), feature_extractor)
+    evaluator = Evaluator(model, test_raw, feature_extractor)
     for metric in args.eval_metrics:
         if metric == "bleu":
             for method in args.gen_method:
