@@ -82,7 +82,7 @@ def load_config(config_path):
 def get_test_raw():
     print("Loading dataset...")
     data_loader = Flicker8K(
-        "data/flicker8k", tokenizer=tokenizer, feature_extractor=feature_extractor
+        "./data/flicker8k", tokenizer=tokenizer, feature_extractor=feature_extractor
     )
     _, _, test_raw = data_loader.get_raw_splits()
     return test_raw
@@ -118,13 +118,8 @@ if __name__ == "__main__":
 
     feature_extractor = FeatureExtractor(feature_extractor=effnet)
 
-    if config["model"]["params"]["pooling"] == False:
-        feature_extractor.load("weights/features-pool.cache.pkl")
-    else:
-        feature_extractor.load("weights/features.cache.pkl")
-
     tokenizer = Tokenizer.from_vocabulary(
-        path="weights/tokenizer_vocab.pkl",
+        path="./weights/tokenizer_vocab.pkl",
         standardize=Preprocessor(),
         ragged=True,
     )
@@ -138,12 +133,12 @@ if __name__ == "__main__":
                 if method == "greedy":
                     evaluator.evaluate_bleu_greedy(
                         temperatures=args.temperatures,
-                        output_file="results/bleu_results_greedy.txt",
+                        output_file="./results/bleu_results_greedy.txt",
                     )
                 elif method == "beam":
                     evaluator.evaluate_bleu_beam(
                         kbeams=args.kbeams,
-                        output_file="results/bleu_results_beam.txt",
+                        output_file="./results/bleu_results_beam.txt",
                     )
         else:
             raise ValueError(f"Unknown evaluation method: {metric}")

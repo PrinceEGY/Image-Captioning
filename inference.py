@@ -109,13 +109,9 @@ if __name__ == "__main__":
     effnet.trainable = False
 
     feature_extractor = FeatureExtractor(feature_extractor=effnet)
-    if config["model"]["params"]["pooling"] == False:
-        feature_extractor.load("weights/features-pool.cache.pkl")
-    else:
-        feature_extractor.load("weights/features.cache.pkl")
 
     tokenizer = Tokenizer.from_vocabulary(
-        path="weights/tokenizer_vocab.pkl",
+        path="./weights/tokenizer_vocab.pkl",
         standardize=Preprocessor(),
         ragged=True,
     )
