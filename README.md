@@ -33,6 +33,7 @@ gdown --fuzzy https://drive.google.com/file/d/12slgnMETzzhDjsVxCegw0YMYshFxV-t6/
 ```
 ## Making inference
 Two algorithms supported for generation
+
 1- **Greedy Decoding** with **Temperature** Argument: In this approach, the model generates captions by greedily selecting the most probable word at each time step, with the softmax output adjusted by a temperature parameter. This allows for controlling the randomness of word selection during generation.
 A low temperature (e.g., 0.1) generates more focused and deterministic text, while a high temperature (e.g., 1.0) produces more random and diverse outputs.
 
