@@ -108,7 +108,9 @@ if __name__ == "__main__":
     effnet = EfficientNetV2B3(include_top=False, pooling=pooling)
     effnet.trainable = False
 
-    feature_extractor = FeatureExtractor(feature_extractor=effnet)
+    feature_extractor = FeatureExtractor(
+        feature_extractor=effnet, features_shape=config["model"]["img_features_shape"]
+    )
 
     tokenizer = Tokenizer.from_vocabulary(
         path="./weights/tokenizer_vocab.pkl",

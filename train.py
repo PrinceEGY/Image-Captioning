@@ -158,6 +158,7 @@ if __name__ == "__main__":
     feature_extractor = FeatureExtractor(
         imgs_path="./data/flicker8k/Flicker8k_Dataset",
         feature_extractor=effnet,
+        features_shape=config["model"]["img_features_shape"],
     )
 
     tokenizer = Tokenizer.from_vocabulary(
